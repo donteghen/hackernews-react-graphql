@@ -26,6 +26,7 @@ const resolvers = {
 };
 
 const server = new ApolloServer({
+  
   typeDefs: fs.readFileSync(
     path.join(__dirname, 'schema.graphql'),
     'utf8'
@@ -36,10 +37,7 @@ const server = new ApolloServer({
       ...req,
       prisma,
       pubsub,
-      userId:
-        req && req.headers.authorization
-          ? getUserId(req)
-          : null
+      userId: req && req.headers.authorization ? getUserId(req) : null
     };
   },
   subscriptions: {

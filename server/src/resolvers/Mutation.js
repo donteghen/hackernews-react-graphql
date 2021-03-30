@@ -25,7 +25,7 @@ async function signup(parent, args, context, info) {
   });
 
   const token = jwt.sign({ userId: user.id }, APP_SECRET);
-
+  context.userId = user.id;
   return {
     token,
     user
@@ -49,7 +49,7 @@ async function login(parent, args, context, info) {
   }
 
   const token = jwt.sign({ userId: user.id }, APP_SECRET);
-
+  user.token = token
   return {
     token,
     user
