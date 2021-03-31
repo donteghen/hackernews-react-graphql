@@ -1,12 +1,21 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { Link, withRouter } from 'react-router-dom';
 import { AUTH_TOKEN } from '../constants';
 
 
     const Header = () => {
+      const authToken = localStorage.getItem(AUTH_TOKEN);
+      const [isAuth, setIsAuth] = useState(() => (authToken? true : false));
+      useEffect(()=>{
+        console.log(isAuth)
+        setIsAuth(() => localStorage.getItem(AUTH_TOKEN) ? true : false)
+        console.log(isAuth)
+      })
+      const checkAuth = ()=>{
+        setIsAuth(() => localStorage.getItem(AUTH_TOKEN) ? true : false)
+      }
         const history = useHistory();
-        const authToken = localStorage.getItem(AUTH_TOKEN);
         return (
           <div className="flex pa1 justify-between nowrap orange">
             <div className="flex flex-fixed black">
@@ -15,17 +24,17 @@ import { AUTH_TOKEN } from '../constants';
                 new
               </Link>
               <div className="ml1">|</div>
-              <Link to="/top" className="ml1 no-underline black">
+              {/* <Link to="/top" className="ml1 no-underline black">
                 top
               </Link>
-              <div className="ml1">|</div>
+              <div className="ml1">|</div> */}
               <Link
                 to="/search"
                 className="ml1 no-underline black"
               >
                 search
               </Link>
-              {authToken && (
+              {isAuth && (
                 <div className="flex">
                   <div className="ml1">|</div>
                   <Link
@@ -38,12 +47,13 @@ import { AUTH_TOKEN } from '../constants';
               )}
             </div>
             <div className="flex flex-fixed">
-              {authToken ? (
+              {isAuth ? (
                 <div
                   className="ml1 pointer black"
                   onClick={() => {
                     localStorage.removeItem(AUTH_TOKEN);
                     history.push('/');
+                    checkAuth()
                   }}
                 >
                   logout

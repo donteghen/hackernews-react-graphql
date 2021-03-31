@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import {useMutation, gql} from '@apollo/client';
 import { useHistory } from 'react-router';
-import Error from './ErrorMessage';
 import ErrorMessage from './ErrorMessage';
 import { FEED_QUERY } from './LinkList';
 import { LINKS_PER_PAGE } from '../constants';
@@ -41,16 +40,16 @@ const CreateLink = () =>{
         },
         
         update(cache, {data:{post}}){
-            // const take = LINKS_PER_PAGE;
-            // const skip = 0;
-            // const orderBy = { createdAt: 'desc' };
+            const take = LINKS_PER_PAGE;
+            const skip = 0;
+            const orderBy = { createdAt: 'desc' };
             const {data} = cache.readQuery({
                 query: FEED_QUERY,
-                // variables:{
-                //     skip,
-                //     orderBy,
-                //     take
-                // }
+                variables:{
+                    skip,
+                    orderBy,
+                    take
+                }
             })
             cache.writeQuery({
                 query:FEED_QUERY,
@@ -59,19 +58,19 @@ const CreateLink = () =>{
                         links: [post, ...data.feed.links]
                     }
                 },
-                // variables:{
-                //     skip,
-                //     orderBy,
-                //     take
-                // }
+                variables:{
+                    skip,
+                    orderBy,
+                    take
+                }
             })
         },
         onCompleted: () => history.push('/new/1'),
-        // onError: (e)=>{
-        //     setErrorState({
-        //         error: true
-        //     })
-        // },
+        onError: (e)=>{
+            setErrorState({
+                error: true
+            })
+        },
     })
     const goBack = () =>{
         history.push('/')
